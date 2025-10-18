@@ -1,0 +1,25 @@
+{
+  "name": "cypress_2025_rs_js",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "cypress open",
+    "test:ci": "cypress run",
+    "ui": "cypress open",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "cy:record": "cypress run --record --key twoj-klucz-nagrywania",
+    "cy:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
+    "cy:desktop": "cypress run --config viewportWidth=1920,viewportHeight=1080",
+    "cy:mobile:open": "cypress open --config viewportWidth=375,viewportHeight=667",
+    "cy:desktop:open": "cypress open --config viewportWidth=1920,viewportHeight=1080",
+    "cy:j": "cypress run --spec \"cypress/e2e/new_user_full_journey.cy.js\"",
+    "cy:j_en": "cypress run --spec \"cypress/e2e/new_user_full_journey.cy.js\""
+  },
+  "devDependencies": {
+    "cypress": "^14.5.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "uuid": "^9.0.0"
+  }
+}
