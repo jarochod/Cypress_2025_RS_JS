@@ -6,8 +6,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  cypresstests:
+  cypress-tests:
     runs-on: ubuntu-latest
+
     container:
       image: cypress/included:14.5.4
       env:
@@ -18,17 +19,46 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Start the shopping store application
+      - name: Start shopping store application
         run: |
-          echo "Start the shopping store application"
-          chmod +x ./shopping-store/shopping-store-linux-amd64 && ./shopping-store/shopping-store-linux-amd64 &
+          echo "🔹 Start the shopping store application"
+          chmod +x ./shopping-store/shopping-store-linux-amd64
+          nohup ./shopping-store/shopping-store-linux-amd64 > server.log 2>&1 &
+
+          echo "⏳ Waiting for the store to be ready on port 2221..."
+          n=0
+          until [ $n -ge 15 ]; do
+            curl -s http://localhost:2221/ > /dev/null && echo "✅ Store is ready" && break
+            n=$((n+1))
+            echo "Waiting... ($n/15)"
+            sleep 2
+          done
+
+      - name: Verify that the store is running
+        run: |
+          echo "Checking server process and port:"
+          ps aux | grep shopping-store || true
+          netstat -tlnp | grep 2221 || echo "⚠️ Port 2221 not open"
+          echo "First lines of server.log:"
+          head -n 20 server.log || echo "(no log file found)"
 
       - name: Install dependencies
         run: |
-          echo "Install dependencies from lockfile"
+          echo "📦 Install dependencies from lockfile"
           npm ci
 
       - name: Run Cypress tests
         run: |
-          echo "Run Cypress tests"
+          echo "🚀 Run Cypress tests"
           npm run test:ci
+
+      - name: Upload Cypress artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-results
+          path: |
+            cypress/videos
+            cypress/screenshots
+            server.log
+
