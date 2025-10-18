@@ -1,5 +1,4 @@
 name: Cypress Tests
-
 on:
   push:
     branches: [main]
@@ -8,16 +7,12 @@ on:
 jobs:
   cypress:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build and run Cypress tests
-        run: docker compose up --build --abort-on-container-exit
+      - name: List files (debug)
+        run: ls -la
 
-      - name: Upload Cypress results
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-results
-          path: cypress/results
+      - name: Run Docker Compose
+        run: docker compose -f docker-compose.yml up --build --abort-on-container-exit
