@@ -1,0 +1,71 @@
+# ----------------------------------------------------------------------
+# 1. GLOBALNA NORMALIZACJA
+# ----------------------------------------------------------------------
+
+* text=auto
+
+# Pliki konfiguracyjne repo – zawsze LF
+.gitattributes text eol=lf
+.gitignore     text eol=lf
+.editorconfig  text eol=lf
+
+# ----------------------------------------------------------------------
+# 2. JAVASCRIPT / TYPESCRIPT / NODE.JS (Playwright, Cypress)
+# ----------------------------------------------------------------------
+
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.mjs   text eol=lf
+*.cjs   text eol=lf
+*.json  text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.lock  text eol=lf
+
+# ----------------------------------------------------------------------
+# 3. PYTHON
+# ----------------------------------------------------------------------
+
+*.py    text eol=lf
+*.toml  text eol=lf
+*.ini   text eol=lf
+
+# ----------------------------------------------------------------------
+# 4. JAVA
+# ----------------------------------------------------------------------
+
+*.java        text eol=lf
+*.xml         text eol=lf
+*.properties  text eol=lf
+
+# ----------------------------------------------------------------------
+# 5. DOKUMENTACJA / TEKSTY
+# ----------------------------------------------------------------------
+
+*.md    text eol=lf
+*.txt   text eol=lf
+
+# ----------------------------------------------------------------------
+# 6. SKRYPTY SYSTEMOWE
+# ----------------------------------------------------------------------
+
+*.sh    text eol=lf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# ----------------------------------------------------------------------
+# 7. PLIKI BINARNE (ZACHOWAJ BEZ ZMIAN)
+# ----------------------------------------------------------------------
+
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.pdf   binary
+*.zip   binary
+*.gz    binary
+*.jar   binary
+*.class binary

@@ -1,0 +1,25 @@
+root = true
+
+[*]
+# GLOBALNA REGUŁA: Użyj LF dla wszystkich plików tekstowych (JS, TS, Python, MD, JSON, itd.)
+end_of_line = lf 
+insert_final_newline = true
+charset = utf-8
+indent_style = space
+indent_size = 2
+
+
+[*.{bat,cmd}]
+# NADPISANIE: Użyj CRLF dla skryptów Windows (.bat, .cmd)
+end_of_line = crlf
+
+
+[*.py]
+# Korekta wcięcia dla Python
+indent_size = 4
+indent_style = space
+
+[*.java]
+# Korekta wcięcia dla Java
+indent_size = 4
+indent_style = space
