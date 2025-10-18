@@ -1,0 +1,13 @@
+services:
+  cypress-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./cypress/videos:/app/cypress/videos
+      - ./cypress/screenshots:/app/cypress/screenshots
+    tty: true
+    restart: "no"
+    container_name: cypress-tests-runner
