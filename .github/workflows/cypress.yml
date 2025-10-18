@@ -21,8 +21,7 @@ jobs:
       - name: Start the shopping store application
         run: |
           echo "Start the shopping store application"
-          chmod +x ./shopping-store/shopping-store-linux-amd64
-          ./shopping-store/shopping-store-linux-amd64 &
+          chmod +x ./shopping-store/shopping-store-linux-amd64 && ./shopping-store/shopping-store-linux-amd64 &
 
       - name: Install dependencies
         run: |
