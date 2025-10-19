@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: 🛠️ Setup and Run Cypress Tests
-      # Wszystkie polecenia wykonują się wewnątrz kontenera z obrazu cypress/base:22
+      # Wszystkie polecenia wykonują się wewnątrz kontenera z obrazu cypress/included:14.5.4
       run: |
         echo "Install dependencies from lockfile"
         # Instalacja zależności NPM
@@ -37,11 +37,10 @@ jobs:
         ./shopping-store/shopping-store-linux-amd64 &
         
         # 2. Daj aplikacji czas na uruchomienie (krytyczne dla stabilności)
-        echo "Waiting 10 seconds for app to start..."
-        sleep 10
+        echo "Waiting 3 seconds for app to start..."
+        sleep 3
         
         echo "Run Cypress tests"
         # 3. Uruchomienie testów Cypress
-        # Użyjemy polecenia, które masz w swoim package.json (npm run test:ci)
         npm run test:ci
 
