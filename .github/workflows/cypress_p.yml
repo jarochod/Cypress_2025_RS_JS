@@ -1,0 +1,24 @@
+name: Cypress Tests cypress_p
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  playwrighttests:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/included:14.5.4
+      env:
+        ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          echo "Start the shopping store application"
+          chmod +x ./shopping-store/shopping-store-linux-amd64 && ./shopping-store/shopping-store-linux-amd64 &
+          echo "Install dependencies from lockfile"
+          npm ci
+          echo "Run cypress tests"
+          npm run test:ci
