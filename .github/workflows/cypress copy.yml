@@ -24,12 +24,8 @@ jobs:
           echo "Start the shopping store application"
           chmod +x ./shopping-store/shopping-store-linux-amd64 && ./shopping-store/shopping-store-linux-amd64 &
 
-      - name: Install dependencies
-        run: |
           echo "Install dependencies from lockfile"
           npm ci
 
-      - name: Run Cypress tests
-        run: |
           echo "Run Cypress tests"
           npm run test:ci
