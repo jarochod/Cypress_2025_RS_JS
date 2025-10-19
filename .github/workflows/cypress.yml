@@ -37,8 +37,8 @@ jobs:
         ./shopping-store/shopping-store-linux-amd64 &
         
         # 2. Daj aplikacji czas na uruchomienie (krytyczne dla stabilności)
-        echo "Waiting 3 seconds for app to start..."
-        sleep 3
+        echo "Waiting 1 seconds for app to start..."
+        sleep 1
         
         echo "Run Cypress tests"
         # 3. Uruchomienie testów Cypress
