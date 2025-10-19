@@ -3,9 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - ADMIN_USERNAME=${ADMIN_USERNAME}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    env_file:
+      - .env
     volumes:
       - ./cypress/videos:/app/cypress/videos
       - ./cypress/screenshots:/app/cypress/screenshots
