@@ -9,32 +9,39 @@ jobs:
   cypress:
     runs-on: ubuntu-latest
     
+    # 1. Użycie gotowego obrazu Cypress
+    # Wybieramy obraz z Node i Cypress, który będzie środowiskiem dla joba.
+    container:
+      # Użyjemy obrazu od Cypress, który jest optymalny do uruchamiania testów E2E
+      image: cypress/base:22
+      env:
+        # Przekazywanie zmiennych środowiskowych (w tym Secret) bezpośrednio do kontenera
+        BASE_URL: http://localhost:2221/
+        ADMIN_USERNAME: admin
+        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+    
     steps:
     - name: ⬇️ Checkout code
       uses: actions/checkout@v4
       
-    - name: 🔨 Build and Run Cypress Tests with Docker Compose
+    - name: 🛠️ Setup and Run Cypress Tests
+      # Wszystkie polecenia wykonują się wewnątrz kontenera z obrazu cypress/base:22
       run: |
-        # Tworzenie tymczasowego pliku .env na potrzeby akcji. 
-        # Zastąp poniższy wiersz odpowiednimi zmiennymi środowiskowymi, 
-        # które są potrzebne przez Twoją aplikację/testy, np.
-        # echo "API_URL=http://localhost:8080" > .env
-        echo "BASE_URL=http://localhost:2221/" > .env
-        echo "ADMIN_USERNAME=admin" >> .env
-        echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" >> .env
+        echo "Install dependencies from lockfile"
+        # Instalacja zależności NPM
+        npm ci
         
-        # Uruchomienie serwisu 'cypress-tests' z docker-compose.
-        # Flaga --exit-code-from zapewni, że kod wyjścia (status) testów zostanie 
-        # użyty jako kod wyjścia całego polecenia, co jest kluczowe dla statusu joba.
-        # Flaga --build zbuduje obraz, jeśli jest nieaktualny lub nie istnieje.
-        docker-compose up --build --exit-code-from cypress-tests cypress-tests
-      
-    - name: 💾 Upload Test Artifacts (Screenshots & Videos)
-      uses: actions/upload-artifact@v4
-      if: always() # Uruchom zawsze, nawet jeśli testy się nie powiodły, aby zachować artefakty
-      with:
-        name: cypress-artifacts-${{ github.sha }}
-        path: |
-          cypress/videos
-          cypress/screenshots
+        echo "Start the shopping store application"
+        # 1. Nadanie uprawnień i uruchomienie aplikacji w tle (operator &)
+        chmod +x ./shopping-store/shopping-store-linux-amd64
+        ./shopping-store/shopping-store-linux-amd64 &
+        
+        # 2. Daj aplikacji czas na uruchomienie (krytyczne dla stabilności)
+        echo "Waiting 10 seconds for app to start..."
+        sleep 10
+        
+        echo "Run Cypress tests"
+        # 3. Uruchomienie testów Cypress
+        # Użyjemy polecenia, które masz w swoim package.json (npm run test:ci)
+        npm run test:ci
 
