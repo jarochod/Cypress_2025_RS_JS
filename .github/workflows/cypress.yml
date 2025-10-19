@@ -1,24 +1,41 @@
-name: Cypress Tests
+name: Cypress E2E Tests
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
 
 jobs:
   cypress:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Build and run Cypress tests
-        run: docker compose up --build --abort-on-container-exit
-
-      - name: Upload Cypress results
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-results
-          path: cypress/results
+    - name: ⬇️ Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔨 Build and Run Cypress Tests with Docker Compose
+      run: |
+        # Tworzenie tymczasowego pliku .env na potrzeby akcji. 
+        # Zastąp poniższy wiersz odpowiednimi zmiennymi środowiskowymi, 
+        # które są potrzebne przez Twoją aplikację/testy, np.
+        # echo "API_URL=http://localhost:8080" > .env
+        echo "BASE_URL=http://localhost:2221/" > .env
+        echo "ADMIN_USERNAME=admin" >> .env
+        echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" >> .env
+        
+        # Uruchomienie serwisu 'cypress-tests' z docker-compose.
+        # Flaga --exit-code-from zapewni, że kod wyjścia (status) testów zostanie 
+        # użyty jako kod wyjścia całego polecenia, co jest kluczowe dla statusu joba.
+        # Flaga --build zbuduje obraz, jeśli jest nieaktualny lub nie istnieje.
+        docker-compose up --build --exit-code-from cypress-tests cypress-tests
+      
+    - name: 💾 Upload Test Artifacts (Screenshots & Videos)
+      uses: actions/upload-artifact@v4
+      if: always() # Uruchom zawsze, nawet jeśli testy się nie powiodły, aby zachować artefakty
+      with:
+        name: cypress-artifacts-${{ github.sha }}
+        path: |
+          cypress/videos
+          cypress/screenshots
 
